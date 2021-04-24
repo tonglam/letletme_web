@@ -4,41 +4,43 @@ const routes: Array<RouteRecordRaw> = [
     {
         path: '/',
         name: 'Home',
-        component: () => import('@/views/Home.vue')
+        component: () => import('@/views/index.vue')
     },
     {
-        path: '/group',
-        name: 'Group',
-        component: () => import('@/views/group/Group.vue'),
+        path: '/404',
+        component: () => import('@/views/web/error.vue'),
         meta: {
-            title: '公众号',
-        },
+            title: 'error'
+        }
+    },
+    {
+        path: '/',
+        component: () => import('@/layout/layout.vue'),
         children: [
             {
-                path: 'scout',
-                name: 'Scout',
-                component: () => import('@/views/group/Scout.vue'),
-                meta: {
-                    title: '推荐',
-                }
+                path: '/group',
+                name: 'group',
+                component: () => import('@/views/group/index.vue'),
+                children: [
+                    {
+                        path: 'scout',
+                        name: 'Scout',
+                        component: () => import('@/views/group/scout.vue'),
+                        meta: {
+                            title: '推荐',
+                        }
+                    }
+                ]
             }
         ]
     },
 ]
 
-const router = createRouter({
-    history: createWebHistory(process.env.BASE_URL),
-    routes
-})
+export const asyncRoutes = []
 
-router.beforeEach((to, from, next) => {
-    /* 路由发生变化修改页面title */
-    let title: string = '';
-    if (typeof to.meta.title === "string") {
-        title = to.meta.title;
-    }
-    document.title = title
-    next()
+export const router = createRouter({
+    history: createWebHistory(),
+    routes: routes
 })
 
 export default router
